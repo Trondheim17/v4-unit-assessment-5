@@ -19,7 +19,8 @@ module.exports = {
         const user = registeredUser[0]
         req.session.user = {
             username: user.username,
-            id: user.user_id
+            id: user.user_id,
+            profilePicture: user.profile_pic
         }
         return res.status(200).send(req.session.user)
     },
@@ -38,6 +39,7 @@ module.exports = {
         req.session.user = {
             id: user.user_id,
             username: user.username,
+            profilePicture: user.profile_pic
         }
         console.log(req.session.user)
         return res.status(200).send(req.session.user)

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { logout, updateUser } from '../../redux/reducer'
 import axios from 'axios';
 import homeLogo from './../../assets/home_logo.png';
 import newLogo from './../../assets/new_logo.png';
@@ -20,20 +22,20 @@ class Nav extends Component {
 
   getUser() {
     axios.get('/api/auth/me')
-      .then(res => 'replace this string with something useful')
+      .then(res => this.props.updateUser(res.data))
   }
 
   logout() {
     axios.post('/api/auth/logout')
-      .then(_ => 'replace this string with something else')
+      .then(res => this.props.logout(res.data))
   }
 
   render() {
     return this.props.location.pathname !== '/' &&
       <div className='nav'>
         <div className='nav-profile-container'>
-          <div className='nav-profile-pic'></div>
-          <p>placeholder username</p>
+          <div className='nav-profile-pic' style={{ backgroundImage: `url(${this.props.profilePicture})` }}></div>
+          <p>{`${this.props.username}`}</p>
         </div>
         <div className='nav-links'>
           <Link to='/dash'>
@@ -50,4 +52,15 @@ class Nav extends Component {
   }
 }
 
-export default withRouter(Nav);
+function mapStateToProps(state) {
+  return state
+}
+
+function mapDispatchToProps() {
+  return {
+    updateUser,
+    logout
+  }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Nav))
